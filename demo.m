@@ -6,5 +6,7 @@
 % Author: Xiaoming Yu, 2017.
 
 img_shadow=im2double(imread('./image/test.tif'));
-[img_deshadow]=shadowRemoval(img_shadow,[]);
+det_scribbles=im2double(imread('./image/det_scribbles.bmp'));
+cor_scribbles=im2double(imread('./image/cor_scribbles.bmp'));
+[img_deshadow]=shadowRemoval(img_shadow,det_scribbles,cor_scribbles);
 

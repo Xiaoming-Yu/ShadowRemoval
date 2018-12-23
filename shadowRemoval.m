@@ -1,4 +1,4 @@
-function [img_deshaow] = shadowRemoval(img_shadow, scribbles)
+function [img_deshaow] = shadowRemoval(img_shadow, det_scribbles, cor_scribbles)
 % Perform shadow removal using color-lines.
 %
 % The details of the algorithm are described in our paper: 
@@ -7,7 +7,9 @@ function [img_deshaow] = shadowRemoval(img_shadow, scribbles)
 %
 % Input arguments:
 % img_shadow - A shadow image in the range [0,1], type: double
-% scribbles  - A user scribbles gray image for shadow detection,
+% det_scribbles  - A user scribbles for shadow detection,
+%              in the range [0,1], type: double
+% cor_scribbles  - A user scribbles for offset correction,
 %              in the range [0,1], type: double
 %
 % Output argument:
@@ -21,13 +23,12 @@ if (N_COLORS ~= 3) % input verification
     error(['An RGB input image is required, while input ',...
         'has only ',num2str(N_COLORS),' dimensions']);
 end
-if ~exist('scribbles','var') || isempty(scribbles)
-    [scribbles]=getScribbles(img_shadow);
-else
+if ~exist('det_scribbles','var') || isempty(det_scribbles)
+    [det_scribbles]=getScribbles(img_shadow);
 end
 
 % Offset correction
-[offset]=getOffset(img_shadow);
+[offset, cor_scribbles]=getOffset(img_shadow,cor_scribbles);
 img_c = zeros([H,W,3]);
 if size(offset,1)==H
      img_c= img_shadow - offset;
@@ -69,7 +70,7 @@ lambda = 0.001;
 luma = wls_optimization(luma_estimation, data_term_weight, img_c, lambda);
 
 % Shadow detection 
-lightmap = scribbles>0.9; shadowmap = scribbles<0.6&scribbles>0.4;
+lightmap = det_scribbles>0.9; shadowmap = det_scribbles<0.6&det_scribbles>0.4;
 limg=log(max(img_1d,eps));
 trdata=[limg(lightmap(:),:);limg(shadowmap(:),:)];
 trlabel=zeros([size(trdata,1),1]);
@@ -156,15 +157,19 @@ bp=boundarymask(pmask);
 data_term_weight(bp ==1)=data_term_weight(bp==1).*0.4;
 data_term_weight(anomalousValue)=0.4;
 data_term_weight(lmask==1)=1;
-lambda = lmask*0.001+pmask*0.001+umask*0.001;
+lambda=lmask*0.001+pmask*0.001+umask*0.001;
 
 for color_idx=1:3
     scale(:,:,color_idx)=wls_optimization(scale_estimatiom(:,:,color_idx),data_term_weight,luma,lambda);
 end
 img_deshaow=img_shadow./scale;
 
+r = img_shadow(:,:,1); g = img_shadow(:,:,2); b = img_shadow(:,:,3);
+r(lightmap)=1; g(shadowmap)=1; b(cor_scribbles>0.9)=1;
+input_data = cat(3,r,g,b);
+
 figure,
-subplot(2,4,1);imshow(img_shadow);title('Input');
+subplot(2,4,1);imshow(input_data);title('Input');
 subplot(2,4,2);imshow(clu_ori);title('Original image clustering');
 subplot(2,4,3);imshow(luma_estimation);title('Initial luma estimation');
 subplot(2,4,4);imshow(lmask*0.3+pmask*0.7+umask);title('Shadow mask');
