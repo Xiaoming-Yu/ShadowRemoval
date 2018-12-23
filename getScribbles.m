@@ -15,7 +15,7 @@ function [ scribbles ] = getScribbles( img )
 %
 % Author: Xiaoming Yu, 2017.
 
-   disp('Please select the lit area for shadow detection...');
+   disp('Please select the shadow free region for shadow detection...');
    figure;imshow(img);
    [~,xs,ys] = freehanddraw(gca,'color','r','linewidth',3);
     close
@@ -24,7 +24,7 @@ function [ scribbles ] = getScribbles( img )
        lightmap(round(ys(index)),round(xs(index)))=1;
     end
    lightmap=logical(imdilate(lightmap,strel('sphere',3)));
-   disp('Please select the shadow area for shadow detection');
+   disp('Please select the shadow region for shadow detection');
    figure;imshow(img);
    [~,xs,ys] = freehanddraw(gca,'color','r','linewidth',3);
     close

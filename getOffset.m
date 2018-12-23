@@ -12,7 +12,7 @@ function [offsetMap, cor_scribbles] = getOffset(img, cor_scribbles)
 %
 % Author: Xiaoming Yu, 2017. 
     if ~exist('cor_scribbles','var') || isempty(cor_scribbles)
-        disp('Please select the brightness change area in similar material for offset correction...');
+        disp('Please select the shadow gradient region with similar material for offset correction...');
         figure;imshow(img);
         [~,xs,ys] = freehanddraw(gca,'color','r','linewidth',3);
         close

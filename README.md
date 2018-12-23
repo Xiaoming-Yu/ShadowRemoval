@@ -7,6 +7,7 @@ Code for the paper "A New Shadow Removal Method using Color-Lines", Internationa
 This code was tested on MATLAB 2016b on x64 windows.
 ### Usage
 demo.m presents a simple interaction for shadow removal. 
+<p align="center"><img src='image/demo.jpg'  align="center" width='90%'></p>
 
 ## Results
 <p align="center"><img src='image/results.jpg'  align="center" width='90%'></p>
