@@ -11,8 +11,8 @@ demo.m presents a simple interaction for shadow removal.
 
 You can deshadow your image with the following script:
 ```
-	img_shadow = im2double(imread('PHOTO_PATH'));
-	img_deshadow = shadowRemoval(img_shadow);
+img_shadow = im2double(imread('PHOTO_PATH'));
+img_deshadow = shadowRemoval(img_shadow);
 ```
 ## Results
 <p align="center"><img src='image/results.jpg'  align="center" width='90%'></p>
