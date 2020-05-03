@@ -26,9 +26,12 @@ end
 if ~exist('det_scribbles','var') || isempty(det_scribbles)
     [det_scribbles]=getScribbles(img_shadow);
 end
-
+if ~exist('cor_scribbles','var') || isempty(cor_scribbles)
+    [offset, cor_scribbles]=getOffset(img_shadow);
+else
+    [offset, cor_scribbles]=getOffset(img_shadow,cor_scribbles);
+end
 % Offset correction
-[offset, cor_scribbles]=getOffset(img_shadow,cor_scribbles);
 img_c = zeros([H,W,3]);
 if size(offset,1)==H
      img_c= img_shadow - offset;

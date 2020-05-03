@@ -21,6 +21,7 @@ function [offsetMap, cor_scribbles] = getOffset(img, cor_scribbles)
            guidemap(round(ys(index)),round(xs(index)))=1;
        end
         guidemap=logical(imdilate(guidemap,strel('sphere',3)));
+        cor_scribbles = guidemap;
     else
         guidemap = cor_scribbles > 0.4;
     end

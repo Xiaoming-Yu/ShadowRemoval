@@ -9,6 +9,11 @@ This code was tested on MATLAB 2016b on x64 windows.
 demo.m presents a simple interaction for shadow removal. 
 <p align="center"><img src='image/demo.jpg'  align="center" width='90%'></p>
 
+You can deshadow your image with the following script:
+```
+	img_shadow = im2double(imread('PHOTO_PATH'));
+	img_deshadow = shadowRemoval(img_shadow);
+```
 ## Results
 <p align="center"><img src='image/results.jpg'  align="center" width='90%'></p>
 
